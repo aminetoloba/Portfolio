@@ -99,8 +99,8 @@ function Header() {
       <div
         className={`fixed right-0 top-16 z-50 w-[min(82%,320px)] rounded-bl-2xl border-l border-b border-slate-200 bg-white shadow-xl transition-all duration-300 ease-in-out md:hidden ${
           menuOpen
-            ? 'visible translate-x-0 opacity-100'
-            : 'invisible translate-x-full opacity-0'
+            ? 'visible translate-y-0 opacity-100'
+            : 'pointer-events-none invisible -translate-y-2 opacity-0'
         }`}
       >
         <div className="flex flex-col gap-1 p-5">
