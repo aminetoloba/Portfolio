@@ -53,7 +53,7 @@ const Tech = ({ imgSrc, name }) => (
   <div className="group flex flex-col items-center justify-center gap-3 p-5 bg-white border border-slate-200 rounded-xl shadow-sm hover:shadow-lg hover:border-blue-200 hover:-translate-y-1 transition-all duration-300">
     <div className="w-16 h-16 flex items-center justify-center">
       <img
-        src={imgSrc}
+        src={process.env.PUBLIC_URL + imgSrc}
         alt={`Logo ${name}`}
         className="max-w-full max-h-full object-contain"
         loading="lazy"

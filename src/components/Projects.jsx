@@ -11,7 +11,7 @@ const ProjectCard = ({ title, imageUrl, githubUrl, description, screenshots }) =
         {/* Image du projet */}
         <div className="relative h-56 shrink-0 overflow-hidden bg-slate-50">
           <img
-            src={imageUrl}
+            src={process.env.PUBLIC_URL + imageUrl}
             alt={`Aperçu du projet ${title}`}
             className="h-full w-full object-cover object-contain transition-transform duration-500 group-hover:scale-105"
           />
