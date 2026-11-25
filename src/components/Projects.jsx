@@ -1,80 +1,107 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 
+
 const ProjectCard = ({ title, imageUrl, githubUrl, description, screenshots }) => {
   const [showModal, setShowModal] = useState(false);
 
   return (
     <>
-      <div
-        className="relative h-64 bg-cover bg-center rounded-lg shadow hover:shadow-xl transition group cursor-pointer"
-        style={{ backgroundImage: `url(${imageUrl})` }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 flex flex-col items-center justify-center space-y-4 opacity-0 group-hover:opacity-100 transition">
-  <p className="text-white text-center font-semibold text-xl">{title}</p>
-
-  <div className="flex space-x-4">
-    <a
-      href={githubUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="px-4 py-2 bg-white text-black font-semibold rounded hover:bg-gray-300"
-    >
-      Code
-    </a>
-    <button
-      onClick={() => setShowModal(true)}
-      className="px-4 py-2 bg-white text-black font-semibold rounded hover:bg-gray-300"
-    >
-      Détails
-    </button>
-  </div>
-</div>
-
-      </div>
-
-      {showModal && (
-  <div
-    onClick={() => setShowModal(false)}
-    className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 px-4"
-  >
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="relative bg-white rounded-lg shadow-lg max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col"
-    >
-      {/* Bouton X correctement placé */}
-      <button
-        onClick={() => setShowModal(false)}
-        className="absolute top-4 right-4 bg-white border border-gray-300 rounded-full p-1 text-gray-700 hover:text-black hover:bg-gray-100 transition"
-        style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
-      >
-        <X className="w-5 h-5" />
-      </button>
-
-      <div className="flex justify-between items-center p-4 border-b">
-        <h2 className="text-xl font-bold">{title}</h2>
-      </div>
-      
-      <div className="p-4 overflow-y-auto space-y-4 flex-1">
-        <p className="text-gray-700">{description}</p>
-
-        {screenshots.map((src, index) => (
+      <article className="group flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        {/* Image du projet */}
+        <div className="relative h-56 shrink-0 overflow-hidden bg-slate-50">
           <img
-            key={index}
-            src={src}
-            alt={`screenshot-${index}`}
-            className={`rounded-md ${
-            title === "EMSI SmartPresence" ? "w-1/4 mx-auto" : "w-full"
-          }`}   
+            src={imageUrl}
+            alt={`Aperçu du projet ${title}`}
+            className="h-full w-full object-cover object-contain transition-transform duration-500 group-hover:scale-105"
           />
-        ))}
-      </div>
-    </div>
-  </div>
-)}
+        </div>
+
+        {/* Informations et actions */}
+        <div className="flex flex-1 flex-col p-5">
+          <h2 className="mb-3 text-lg font-bold text-slate-800">
+            {title}
+          </h2>
+
+          <p className="mb-5 flex-1 text-sm leading-relaxed text-slate-600">
+            {description}
+          </p>
+
+          <div className="mt-auto grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <a
+              href={githubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-secondary w-full text-sm"
+            >
+              Voir le code
+            </a>
+
+            <button
+              type="button"
+              onClick={() => setShowModal(true)}
+              className="btn-primary w-full text-sm"
+            >
+              Voir les captures
+            </button>
+          </div>
+        </div>
+      </article>
+
+      {/* Fenêtre des détails */}
+      {showModal && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Détails du projet ${title}`}
+          onClick={() => setShowModal(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 px-4 py-6"
+        >
+          <div
+            onClick={(event) => event.stopPropagation()}
+            className="relative flex max-h-[calc(100dvh-2rem)] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+          >
+            <div className="flex items-center justify-between gap-4 border-b border-slate-200 p-5">
+              <h2 className="text-xl font-bold text-slate-800">
+                {title}
+              </h2>
+
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                aria-label="Fermer les détails"
+                className="rounded-full border border-slate-200 bg-white p-2 text-slate-600 hover:bg-slate-100"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="flex-1 space-y-5 overflow-y-auto p-5">
+              <p className="leading-relaxed text-slate-600">
+                {description}
+              </p>
+
+              {screenshots.map((src, index) => (
+                <img
+                  key={`${src}-${index}`}
+                  src={src}
+                  alt={`Capture ${index + 1} du projet ${title}`}
+                  loading="lazy"
+                  className={`mx-auto rounded-lg border border-slate-100 ${
+                    title === "EMSI SmartPresence"
+                      ? "w-full max-w-xs"
+                      : "w-full"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
+
 
 const ProjectsGrid = () => {
   const projects = [
@@ -145,11 +172,11 @@ const ProjectsGrid = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="w-full max-w-6xl min-w-0 mx-auto p-4 overflow-x-clip">
       <h4 className="text-xl md:text-4xl font-bold text-center text-blue-700 mb-10 relative after:content-[''] after:block after:w-24 after:h-1 after:bg-blue-700 after:mx-auto after:mt-4">
          Découvrez ici quelques-uns des projets sur lesquels j'ai travaillé.
       </h4>
-   <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto p-4 pb-12">
+   <section className="grid w-full min-w-0 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mx-auto p-4 pb-12">
         {projects.map((proj, index) => (
          <ProjectCard key={index} {...proj} />
       ))}
