@@ -1,62 +1,70 @@
 import { useState } from "react";
 import { X } from "lucide-react";
 
-const CertificateCard = ({ title, institutions ,imageUrl }) => {
-  const [hovered, setHovered] = useState(false);
-  const [showImage, setShowImage] = useState(false)
+
+const CertificateCard = ({ title, institutions, imageUrl }) => {
+  const [showImage, setShowImage] = useState(false);
 
   return (
-    <div
-      className="relative bg-gray-100 rounded-lg overflow-hidden shadow hover:shadow-md transition"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
-        <div
-        className="relative bg-cover bg-center rounded-lg overflow-hidden shadow hover:shadow-md transition aspect-[4/3]"
-        style={{ backgroundImage: `url(${imageUrl})` }}>
-        </div>
+    <article className="flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow duration-300 hover:shadow-lg">
+      {/* Image du certificat */}
+      <div className="flex aspect-[4/3] items-center justify-center bg-gray-50 p-3">
+        <img
+          src={imageUrl}
+          alt={title}
+          loading="lazy"
+          className="h-full w-full object-contain"
+        />
+      </div>
 
-      {hovered && (
-        <div className="absolute inset-0 bg-black bg-opacity-60 flex flex-col items-center justify-center transition space-y-4 p-4">
-          <p className="text-white text-center font-semibold text-xl">{title}</p>
-          <p className="text-gray-300">{institutions}</p>
-          <button
-            onClick={() => setShowImage(true)}
-            className="px-4 py-2 bg-white text-black font-semibold rounded hover:bg-gray-300"
+      {/* Informations */}
+      <div className="flex flex-1 flex-col gap-3 p-4">
+        <h3 className="text-base font-semibold leading-snug text-gray-800">
+          {title}
+        </h3>
+
+        <p className="flex-1 text-sm text-gray-500">
+          {institutions}
+        </p>
+
+        <button
+          onClick={() => setShowImage(true)}
+          className="mt-auto w-full rounded-lg bg-blue-600 px-4 py-2.5 font-semibold text-white transition hover:bg-blue-700"
+        >
+          Voir le certificat
+        </button>
+      </div>
+
+      {/* Fenêtre d'agrandissement */}
+      {showImage && (
+        <div
+          onClick={() => setShowImage(false)}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 px-3 py-4"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-h-[calc(100dvh-2rem)] w-full max-w-3xl overflow-y-auto rounded-xl bg-white p-3 sm:p-5"
           >
-            Voir
-          </button>
+            <button
+              onClick={() => setShowImage(false)}
+              aria-label="Fermer"
+              className="absolute right-2 top-2 z-10 rounded-full bg-white p-2 text-gray-700 shadow hover:bg-gray-100"
+            >
+              <X className="h-6 w-6" />
+            </button>
+
+            <img
+              src={imageUrl}
+              alt={title}
+              className="mx-auto max-h-[calc(100dvh-6rem)] w-full rounded-lg object-contain"
+            />
+          </div>
         </div>
       )}
-
-      {showImage && (
-  <div
-    onClick={() => setShowImage(false)}
-    className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 transition-opacity duration-500 ease-in-out animate-fade-in"
-  >
-    <div
-      onClick={(e) => e.stopPropagation()}
-      className="relative bg-white rounded-lg shadow-lg p-4 max-w-3xl w-full mx-4"
-    >
-      <button
-        onClick={() => setShowImage(false)}
-        className="absolute -top-4 -right-4 bg-white border border-gray-300 rounded-full p-1 text-gray-700 hover:text-black hover:bg-gray-100 transition"
-        style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }}
-      >
-        <X className="w-5 h-5" />
-      </button>
-
-      <img
-        src={imageUrl}
-        alt={title}
-        className="rounded-md w-full object-contain max-h-[80vh]"
-      />
-    </div>
-  </div>
-)}
-    </div>
+    </article>
   );
 };
+
 
 const CertificatesGrid = () => {
   const certificates = [
@@ -80,12 +88,12 @@ const CertificatesGrid = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="section-container py-10 md:py-16">
       <h4 className="text-xl md:text-4xl font-bold text-center text-blue-700 mb-10 relative after:content-[''] after:block after:w-24 after:h-1 after:bg-blue-700 after:mx-auto after:mt-4">
          Voici quelques-unes de mes certifications professionnelles.
       </h4>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3 md:gap-6">
         {certificates.map((cert, index) => (
           <CertificateCard
             key={index}
