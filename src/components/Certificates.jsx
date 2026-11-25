@@ -10,7 +10,7 @@ const CertificateCard = ({ title, institutions, imageUrl }) => {
       {/* Image du certificat */}
       <div className="flex aspect-[4/3] items-center justify-center bg-gray-50 p-3">
         <img
-          src={imageUrl}
+          src={process.env.PUBLIC_URL + imageUrl}
           alt={title}
           loading="lazy"
           className="h-full w-full object-contain"
